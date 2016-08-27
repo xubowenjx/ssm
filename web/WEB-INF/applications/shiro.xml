@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
+	<bean id="mycredentialsMatcher" class="com.xbw.spring.applications.shiro.PaswordChek" />
+	<!-- 缓存管理 -->
+	<bean id="shiroCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"></bean>
+
+	<bean id="myRealm" class="com.xbw.spring.applications.shiro.SelfRealm">
+		<!-- 自定义realm加入自定义密码校验 -->
+		<property name="credentialsMatcher" ref="mycredentialsMatcher" />
+	</bean>
+	<!-- 这里主要是设置自定义的单Realm应用,若有多个Realm,可使用'realms'属性代替 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="myRealm" />
+		<property name="cacheManager" ref="shiroCacheManager" />
+	</bean>
+	<!-- 自定义访问权限校验 -->
+	<bean id="myCaptchaFilter" class="com.xbw.spring.applications.shiro.RoleFilter" />
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- Shiro的核心安全接口,这个属性是必须的 -->
+		<property name="securityManager" ref="securityManager" />
+		<!-- 要求登录时的链接(可根据项目的URL进行替换),非必须的属性,默认会自动寻找Web工程根目录下的"/login.jsp"页面 -->
+		<property name="loginUrl" value="/" />
+		<!-- 对于未授权的请求跳转403界面 -->
+		<property name="unauthorizedUrl" value="/jsp/errors/403.jsp" />
+		<property name="filters">
+			<map>
+				<entry key="authc" value-ref="myCaptchaFilter" />
+			</map>
+		</property>
+		<!-- anon 不校验 authc 映射自定义的校验规则 -->
+		<property name="filterChainDefinitions">
+			<value>
+				/login/*=anon
+				/info/*=authc
+			</value>
+		</property>
+
+	</bean>
+</beans>
