@@ -65,7 +65,8 @@
 
 ##	第一个controller
 
-	```java
+```java
+
 @Controller
 @RequestMapping("/logon")
 public class LoginControll {
