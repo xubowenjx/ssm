@@ -38,10 +38,6 @@
 </beans>
 
  	```
-## 2.配置applicationContext.xml
-
-    这个不是必须的,applicationContext是和第三方需要配置的应用相关,和spring本身的配置没关系。
-  后面需要的时候再配置
 
 ## 3.修改web.xml
   
