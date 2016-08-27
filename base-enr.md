@@ -11,24 +11,31 @@
  	```xml
  	
 <?xml version="1.0" encoding="UTF-8"?>
-  <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="
-       http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context 
-       http://www.springframework.org/schema/context/spring-context-4.0.xsd">
-    <!--启用注解-->
-    <context:annotation-config/>
-    <!--配置视图-->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/jsp/"/>
-        <property name="suffix" value=".jsp"/>
-    </bean>
-    <!--注解扫描的基包-->
-    <context:component-scan base-package="com.xbw.spring"/>
-  </beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+  <!-- 设置根路径访问 -->
+  <mvc:view-controller path="/" view-name="forward:/jsp/login.jsp" />
+  <!-- 开启注解 -->
+  <mvc:annotation-driven />
+  <!-- 配置静态资源访问 -->
+  <mvc:resources mapping="/dist/**" location="/dist/" />
+  <!--配置视图 -->
+  <bean
+    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/jsp/" />
+    <property name="suffix" value=".jsp" />
+  </bean>
+  <!--文件上传配置 -->
+  <bean id="multipartResolver"
+    class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+  <!--注解扫描的基包 -->
+  <context:component-scan base-package="com.xbw.spring" />
+</beans>
 
  	```
  	
