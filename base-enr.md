@@ -1,12 +1,12 @@
 ## 1.搭建环境
-*	`new Module` .
-*	选择spring，勾选上`spring MVC`,这样会自动下载需要的包
-*	点击`next`,给你的项目取个名字
-*	然后自动生成了一个项目结构，WEB-INF下面也生成了ApplicationContext.xml和dispacher-servlet.xml。建好自己的包。
-*	进入到web.xml 修改`DispatcherServlet`的&lt;url-pattern&gt;为`/`，此时一个基本的环境搭建好了。但是还不能看到效果
-![工程目录](./images/work-dir.png)
+*	新建一个动态web项目
+*	导入spring4的jar包
+* web-inf下新建dispacher-servlet.xml
+* web-inf下新建applicationContext.xml
+* 修改web.xml
 
-## 2.基本配置
+
+## 2.配置dispacher-servlet.xml
 *	dispacher-servlet.xml是用来配置Spring本身的一些运行设置。
  	```xml
  	
@@ -38,9 +38,36 @@
 </beans>
 
  	```
- 	
+## 2.配置applicationContext.xml
 
-*	第一个controller
+    这个不是必须的,applicationContext是和第三方需要配置的应用相关,和spring本身的配置没关系。
+  后面需要的时候再配置
+
+## 3.修改web.xml
+  
+  ```xml
+  <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+     <!--
+     加载dispatcher-servlet.会自动在WEB-INF下寻找{servlet-name}-servlet.xml
+        -->
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+  ```
+
+##	第一个controller
 
 	```java
 @Controller
@@ -55,6 +82,4 @@ public class LoginControll {
 }
 ```
 
-*   tomcat部署后访问 [tomcat配置]()
 
-![界面](./images/result-1.png)
