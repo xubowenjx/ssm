@@ -157,9 +157,3 @@
    之所以建一个applications文件夹和把数据源单独用一个xml来配置。
    就是为了以后再加入更多的application的时候保持配置的清晰.
    当然，其实可以划分的更细，只是主applicationContext.xml加载路径正确就ok.
-   目前文档结构：
-   ![dir-1](images/work-dir1.png)
-
-
-
-
