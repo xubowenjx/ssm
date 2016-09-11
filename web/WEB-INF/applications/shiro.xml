@@ -3,6 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
+	<!-- 自定义密码校验 -->
 	<bean id="mycredentialsMatcher" class="com.xbw.spring.applications.shiro.PaswordChek" />
 	<!-- 缓存管理 -->
 	<bean id="shiroCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"></bean>
@@ -33,8 +34,8 @@
 		<!-- anon 不校验 authc 映射自定义的校验规则 -->
 		<property name="filterChainDefinitions">
 			<value>
-				/login/*=anon
-				/info/*=authc
+				/logon/*=anon
+				/*/*=authc
 			</value>
 		</property>
 

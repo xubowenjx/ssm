@@ -10,4 +10,7 @@
     <select id="getUser" resultMap="User" parameterType="java.lang.String">
         SELECT * FROM s_user where user_name=#{name}
     </select>
+      <select id="getUserList" resultMap="User" >
+        SELECT * FROM s_user 
+    </select>
 </mapper>

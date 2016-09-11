@@ -1,5 +1,6 @@
 package com.xbw.spring.controller;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
@@ -21,6 +22,7 @@ public class LoginControl {
 	    /** 
 	     * 用户登录 
 	     */  
+
 	    @RequestMapping(value="/login")  
 	    public String login(HttpServletRequest request){  
 	        String resultPageURL = InternalResourceViewResolver.FORWARD_URL_PREFIX + "/";  
@@ -52,7 +54,7 @@ public class LoginControl {
 	        //验证是否登录成功  
 	        if(currentUser.isAuthenticated()){  
 	        	request.setAttribute("userName", username);
-	            System.out.println("用户[" + username + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");  
+	            System.out.println("用户[" + username + "]登录认证通过");  
 	        }else{  
 	            token.clear();  
 	        }  

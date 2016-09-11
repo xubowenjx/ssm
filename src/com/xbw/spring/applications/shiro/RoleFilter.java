@@ -11,7 +11,12 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 
 import com.xbw.spring.model.shiro.SUser;
-
+/**
+  * @ClassName: RoleFilter
+  * @Description: 自定义权限检验
+  * @author xubowen
+  * @date 2016年9月11日 下午3:55:35
+ */
 public class RoleFilter  extends AuthorizationFilter {  
 		protected final Logger log = Logger.getLogger(this.getClass());
 	    public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)  
@@ -35,7 +40,10 @@ public class RoleFilter  extends AuthorizationFilter {
 			}
 			pass = pass?pass:subject.isPermitted(path);
 			SUser u = (SUser)subject.getSession().getAttribute("currentUser");
-			log.info(path+":当前用户"+u.getUserName()+" has power "+pass);
+			if(u==null){
+				return false;
+			} 
+			 log.info(path+":当前用户"+u.getUserName()+" has power "+pass);
 	       return pass;
 	    }  
 }

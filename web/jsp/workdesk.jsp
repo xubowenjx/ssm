@@ -9,6 +9,9 @@
 <body>
 	<h1>
 		Hellow ! ${userName}
+		<div>
+		<a href="../usermanag/user">查看全部用户</a>
+		</div>
 	</h1>
 </body>
 </html>

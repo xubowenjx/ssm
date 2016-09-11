@@ -40,16 +40,18 @@ public class SelfRealm extends AuthorizingRealm {
 	    public void initCredentialsMatcher() {  
 	        setCredentialsMatcher(new PaswordChek());  
 	    }  */
-	   
+
 	@Override
+	 /**
+	  * 用户认证成功后进行基本的授权
+	  */
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		log.info("==================SelfRealm 验证用户 授予角色权限======================");
+
 		 String currentUsername = (String)super.getAvailablePrincipal(principals);  
 		 SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();  
 	        if(null!=currentUsername){
 	        	SUser u = userService.checkUser(currentUsername);
 	        	boolean b ="A".equals(u.getUserType());
-	        	log.info("=========当前登录用户类型============"+(b?"管理员":"普通用户"));
 	        	if(b){//管理员用户不用继续了
 	        		simpleAuthorInfo.addRole("admin");
 	        		 return simpleAuthorInfo;  
