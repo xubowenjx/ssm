@@ -35,6 +35,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/logon/*=anon
+				/webservice/*=anon
 				/*/*=authc
 			</value>
 		</property>

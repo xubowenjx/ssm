@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<!-- 引入CXF -->
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<bean id="helloWorldImpl" class="com.xbw.spring.webservice.impl.HelloWorldImpl" />
+
+	<!-- 2:通过jaxws:server方式来配置webservice -->
+	<jaxws:server serviceClass="com.xbw.spring.webservice.HelloWorld"
+		address="/helloworld">
+		<jaxws:serviceBean>
+			<ref bean="helloWorldImpl" />
+		</jaxws:serviceBean>
+	</jaxws:server>
+</beans>

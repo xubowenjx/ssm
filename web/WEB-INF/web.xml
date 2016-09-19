@@ -12,7 +12,7 @@
      <!--
      加载dispatcher-servlet.会自动在WEB-INF下寻找{servlet-name}-servlet.xml
         -->
-    <servlet>
+   <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
@@ -20,7 +20,15 @@
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>  
+     <servlet>
+        <servlet-name>CXFService</servlet-name>
+        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CXFService</servlet-name>
+        <url-pattern>/webservice/*</url-pattern>
+    </servlet-mapping>  
      <filter>  
         <filter-name>shiroFilter</filter-name>  
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>  

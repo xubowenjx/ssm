@@ -2,9 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+    
     <!-- 启用 autowire -->
     <context:annotation-config/>
     <!--应用扫描的基包位置-->
@@ -13,4 +16,6 @@
     <import resource="applications/dataSource.xml"/>
     <!-- 加载shiro -->
       <import resource="applications/shiro.xml"/>
+      <!-- 引入CXF -->
+      <import resource="applications/webserver.xml" />
 </beans>
