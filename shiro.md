@@ -74,7 +74,7 @@ Spring Shiro
     </bean>
     </beans>
     ```
-  4.  自定义密码校验
+4.  自定义密码校验
     ```java
 
     public class PaswordChek extends SimpleCredentialsMatcher {
@@ -92,8 +92,7 @@ Spring Shiro
     }
 
     ```
-
-   5. 自定义认证授权
+5. 自定义认证授权
 
     ```java
 
@@ -181,7 +180,7 @@ Spring Shiro
 
     ```
 
-    6.自定义权限认证
+6.自定义权限认证
 
 
     ```java
