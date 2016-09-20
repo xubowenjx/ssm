@@ -1,6 +1,5 @@
 package com.xbw.spring.controller;
 
-import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
