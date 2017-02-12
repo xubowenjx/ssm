@@ -1,30 +1,28 @@
 package com.xbw.spring.util;
 
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 
 /**
- * 加密算法
  * 
  * @ClassName: SerUtils
- * @Description: TODO(这里用一句话描述这个类的作用)
+ * @Description:   加密算法
  * @author: xubowen
  * @date: 2016年6月1日 下午5:41:43
  *
  */
 public class SecurUtils {
+	private static final String ENMETHOD = "AES";
+	private SecurUtils(){
+		//private 
+	}
 	public static String md5(String plainText) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
@@ -42,72 +40,65 @@ public class SecurUtils {
 			}
 			// 32位加密
 			return buf.toString();
-			// 16位的加密
-			// return buf.toString().substring(8, 24);
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			return null;
+			CommUtils.log(e,null);
+			return "";
 		}
 	}
-
-	public static byte[] AES(String content, String password) {
+	/**
+	  * @Title: encrAes 
+	  * @Description: aes加密
+	  * @param content
+	  * @param password
+	  * @return 
+	  * @return byte[] 
+	  * @throws
+	 */
+	public static byte[] encrAes(String content, String password) {
 		try {
-			KeyGenerator kgen = KeyGenerator.getInstance("AES");
+			KeyGenerator kgen = KeyGenerator.getInstance(ENMETHOD);
 			kgen.init(128, new SecureRandom(password.getBytes()));
 			SecretKey secretKey = kgen.generateKey();
 			byte[] enCodeFormat = secretKey.getEncoded();
-			SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-			Cipher cipher = Cipher.getInstance("AES");// 创建密码器
+			SecretKeySpec key = new SecretKeySpec(enCodeFormat, ENMETHOD);
+			Cipher cipher = Cipher.getInstance(ENMETHOD);// 创建密码器
 			byte[] byteContent = content.getBytes("utf-8");
 			cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化
-			byte[] result = cipher.doFinal(byteContent);
-			return result;//parseByte2HexStr(result); // 加密
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			e.printStackTrace();
-		}
-		return null;
+			return cipher.doFinal(byteContent);
+		} catch ( Exception e) {
+			CommUtils.log(e,null);
+		}  
+		return new byte[0];
 	}
-
-	public static byte[] decryptAES(byte[] content, String password) {
+	/**
+	  * @Title: decryptAes 
+	  * @Description: aes解密
+	  * @param content
+	  * @param password
+	  * @return 
+	  * @return byte[] 
+	  * @throws
+	 */
+	public static byte[] decryptAes(byte[] content, String password) {
 		try {
-			KeyGenerator kgen = KeyGenerator.getInstance("AES");
+			KeyGenerator kgen = KeyGenerator.getInstance(ENMETHOD);
 			kgen.init(128, new SecureRandom(password.getBytes()));
 			SecretKey secretKey = kgen.generateKey();
 			byte[] enCodeFormat = secretKey.getEncoded();
-			SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-			Cipher cipher = Cipher.getInstance("AES");// 创建密码器
+			SecretKeySpec key = new SecretKeySpec(enCodeFormat, ENMETHOD);
+			Cipher cipher = Cipher.getInstance(ENMETHOD);// 创建密码器
 			cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
-			byte[] result = cipher.doFinal(content);
-			return result; // 加密
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			e.printStackTrace();
-		}
-		return null;
+			return cipher.doFinal(content); // 加密
+		} catch ( Exception e) {
+			CommUtils.log(e,null);
+		}  
+		return new byte[0];
 	}
 
 	/**
 	 * 2进制转化为16进制
 	 * 
 	 * @Title: parseByte2HexStr
-	 * @Description: TODO (这里用一句话描述这个方法的作用)
 	 * @Author: xubowen
 	 * @Create Date: 2016年6月1日 下午5:48:41
 	 * @History: 2016年6月1日 下午5:48:41 xubowen Created.
@@ -116,8 +107,8 @@ public class SecurUtils {
 	 * @return
 	 *
 	 */
-	public static String parseByte2HexStr(byte buf[]) {
-		StringBuffer sb = new StringBuffer();
+	public static String parseByte2HexStr(byte[] buf) {
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < buf.length; i++) {
 			String hex = Integer.toHexString(buf[i] & 0xFF);
 			if (hex.length() == 1) {
@@ -129,10 +120,8 @@ public class SecurUtils {
 	}
 
 	/**
-	 * 16进制转2进制
-	 * 
 	 * @Title: parseHexStr2Byte
-	 * @Description: TODO (这里用一句话描述这个方法的作用)
+	 * @Description: 16进制转2进制
 	 * @Author: xubowen
 	 * @Create Date: 2016年6月1日 下午5:49:12
 	 * @History: 2016年6月1日 下午5:49:12 xubowen Created.
@@ -143,7 +132,7 @@ public class SecurUtils {
 	 */
 	public static byte[] parseHexStr2Byte(String hexStr) {
 		if (hexStr.length() < 1)
-			return null;
+			return new byte[0];
 		byte[] result = new byte[hexStr.length() / 2];
 		for (int i = 0; i < hexStr.length() / 2; i++) {
 			int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
@@ -152,12 +141,5 @@ public class SecurUtils {
 			result[i] = (byte) (high * 16 + low);
 		}
 		return result;
-	}
-	
-	public static void main(String[] args) {
-		String s = "123";
-		System.out.println(md5(s));
-		
-		
 	}
 }

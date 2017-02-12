@@ -11,6 +11,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 
 import com.xbw.spring.model.shiro.SUser;
+import com.xbw.spring.util.CommUtils;
 /**
   * @ClassName: RoleFilter
   * @Description: 自定义权限检验
@@ -29,11 +30,13 @@ public class RoleFilter  extends AuthorizationFilter {
 			try {
 				subject = getSubject(request, response);
 			} catch (Exception e) {
+				CommUtils.log(e, null);
 				return false;
 			}  
 			boolean pass=false;
 			if(subject==null){
 				pass= false;
+				return pass;
 			}
 			if(subject.hasRole("admin")){
 				pass= true;

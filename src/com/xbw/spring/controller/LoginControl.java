@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -19,10 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.support.RequestContext;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.xbw.spring.applications.i18n.MessageSourceHelper;
+import com.xbw.spring.util.CommUtils;
 
 @Controller
 @RequestMapping("/logon")
@@ -46,28 +45,33 @@ public class LoginControl {
 		token.setRememberMe(true);
 		// 获取当前的Subject
 		Subject currentUser = SecurityUtils.getSubject();
+		String msgLogin = "message_login";
 		try {
 			// 在调用了login方法后,SecurityManager会收到AuthenticationToken,并将其发送给已配置的Realm执行必须的认证检查
 			// 每个Realm都能在必要时对提交的AuthenticationTokens作出反应
 			// 所以这一步在调用login(token)方法时,它会走到MyRealm.doGetAuthenticationInfo()方法中,具体验证方式详见此方法
 			currentUser.login(token);
 			resultPageURL = "workdesk";
-		} catch (UnknownAccountException uae) {
-			request.setAttribute("message_login", "未知账户");
-		} catch (IncorrectCredentialsException ice) {
-			request.setAttribute("message_login", "密码不正确");
-		} catch (LockedAccountException lae) {
-			request.setAttribute("message_login", "账户已锁定");
-		} catch (ExcessiveAttemptsException eae) {
-			request.setAttribute("message_login", "用户名或密码错误次数过多");
-		} catch (AuthenticationException ae) {
+		} catch (UnknownAccountException e) {
+			request.setAttribute("", "未知账户");
+			CommUtils.log(e, null);
+		} catch (IncorrectCredentialsException e) {
+			request.setAttribute(msgLogin, "密码不正确");
+			CommUtils.log(e, null);
+		} catch (LockedAccountException e) {
+			request.setAttribute(msgLogin, "账户已锁定");
+			CommUtils.log(e, null);
+		} catch (ExcessiveAttemptsException e) {
+			request.setAttribute(msgLogin, "用户名或密码错误次数过多");
+			CommUtils.log(e, null);
+		} catch (AuthenticationException e) {
 			// 通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景
-			ae.printStackTrace();
+			CommUtils.log(e, null);
 		}
 		// 验证是否登录成功
 		if (currentUser.isAuthenticated()) {
 			request.setAttribute("userName", username);
-			System.out.println("用户[" + username + "]登录认证通过");
+			CommUtils.log(null,"用户[" + username + "]登录认证通过");
 		} else {
 			token.clear();
 		}
@@ -78,7 +82,7 @@ public class LoginControl {
 	 * 用户登出
 	 */
 	@RequestMapping("/logout")
-	public String logout(HttpServletRequest request) {
+	public String logout() {
 		SecurityUtils.getSubject().logout();
 		return InternalResourceViewResolver.FORWARD_URL_PREFIX
 				+ "/";
@@ -88,23 +92,22 @@ public class LoginControl {
 	public String getUserInfo(HttpServletRequest request) {
 		String currentUser = (String) request.getSession().getAttribute(
 				"currentUser");
-		System.out.println("当前登录的用户为[" + currentUser + "]");
+		CommUtils.log(null,"当前登录的用户为[" + currentUser + "]");
 		request.setAttribute("currUser", currentUser);
 		
 		return "/shiro/common";
 	}
-	//,produces = {"application/json;charset=UTF-8"}
 	@RequestMapping(value = "/setLanguage" )
 	@ResponseBody
-	public String setLanguage(HttpServletRequest request,HttpServletResponse response) {
+	public String setLanguage(HttpServletRequest request) {
 		String language = request.getParameter("language");
 		String[] supportLangus = {"en_US","zh_CN"};
 		List<String> ls = Arrays.asList(supportLangus);
+		Locale lo = request.getLocale();
 		if(ls.contains(language)){
-			MessageSourceHelper.local= new Locale(language.split("_")[0], language.split("_")[1]);
+			 lo = new Locale(language);
 		}
-		String msg = messageSourceHelper.getMessage("xbw.msg.hellow",new Object[]{"ddd"}, null);
-		return msg;
+		return messageSourceHelper.getMessage("xbw.msg.hellow",new Object[]{"ddd"}, lo);
 	}
 	 
 }

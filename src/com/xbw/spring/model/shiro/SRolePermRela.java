@@ -14,8 +14,8 @@ public class SRolePermRela implements java.io.Serializable {
 
 	// Constructors
 
-	/** default constructor */
 	public SRolePermRela() {
+		// default constructor 
 	}
 
 	/** full constructor */

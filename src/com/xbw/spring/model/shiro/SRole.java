@@ -6,16 +6,16 @@ package com.xbw.spring.model.shiro;
 
 public class SRole implements java.io.Serializable {
 
-	// Fields
-
+	private static final long serialVersionUID = 3042698957465739034L;
 	private Integer id;
 	private String roleName;
 	private Integer valid;
 
 	// Constructors
 
-	/** default constructor */
+	
 	public SRole() {
+		//default constructor 
 	}
 
 	/** full constructor */

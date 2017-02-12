@@ -5,9 +5,8 @@ package com.xbw.spring.model.shiro;
  */
 
 public class SPerm implements java.io.Serializable {
-
-	// Fields
-
+	    
+	private static final long serialVersionUID = 2681456607502657908L;
 	private Integer id;
 	private String permisionName;
 	private String permisionUrl;
@@ -15,9 +14,8 @@ public class SPerm implements java.io.Serializable {
 	private Integer needCheck;
 
 	// Constructors
-
-	/** default constructor */
 	public SPerm() {
+		//default constructor
 	}
 
 	/** full constructor */

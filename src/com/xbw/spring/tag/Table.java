@@ -3,6 +3,7 @@ package com.xbw.spring.tag;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
+import com.xbw.spring.util.CommUtils;
 import com.xbw.spring.util.FieldsCollector;
 
 /**
@@ -40,7 +41,7 @@ public class Table extends TagSupport{
 
 	@Override
 	public int doStartTag() throws JspException {
-		 if(list.size()>0){
+		 if(!list.isEmpty()){
 			 list = Lists.newLinkedList();;
 		 }
 		return EVAL_BODY_INCLUDE;
@@ -50,19 +51,19 @@ public class Table extends TagSupport{
 		 JspWriter out = pageContext.getOut();  
 		String id =  data+"_table";
 		String table = "<table id='"+id+"' name='"+id+"' class='"+className+"'>";
+		String stringTemp = "<input type='checkbox' id='%s_checkbox' name='%s_checkbox'/>";
 		//1构造表头
 		StringBuilder thead =new StringBuilder("<thead>");
 		int l = list.size();
-		int j = 0;
-		MyNode node = null;
+		MyNode node ;
 		String th = "<th>";
-		String _th = "</th>";
+		String tht = "</th>";
 		if(mutiSelect){
-			thead .append(th+"<input type='checkbox' id='"+data+"_checkbox' name='"+data+"_checkbox'/>"+_th);
+			thead .append(th+ String.format(stringTemp, data,data)+tht);
 		}
 		for(int i = 0;i<l;i++){
 			node = list.get(i);
-			thead .append(th+node.getLable()+_th);
+			thead .append(th+node.getLable()+tht);
 		}
 		 
 		thead.append("</thead>");
@@ -77,21 +78,19 @@ public class Table extends TagSupport{
 		}else if(rs instanceof List){
 			_list = (List<Object>) rs;
 		}
-		  Gson gson = new Gson();
 		String v ;
 		String _tr = "</tr>";
 		String td = "<td>";
-		String _td = "</td>";
+		String td1 = "</td>";
 		 try {
 			while(_rs!=null&&_rs.next()){//构造每一行
 				StringBuilder tr = new StringBuilder("<tr>");
-				j = 0;
 				if(mutiSelect){
-					tr .append(td+"<input type='checkbox' id='"+data+"_checkbox' name='"+data+"_checkbox'/>"+_td);
+					tr .append(td+ String.format(stringTemp, data,data)+td1);
 				}
 				for(int i = 0;i<l;i++){
 					v =  _rs.getString(list.get(i).getName());
-					tr.append(td+v+_td);
+					tr.append(td+v+td1);
 				}
 				tr.append(_tr); 
 				tbody.append(tr);
@@ -101,26 +100,24 @@ public class Table extends TagSupport{
 			}
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			CommUtils.log(e, this.getClassName());
 		}
-		 if(_list!=null&&_list.size()>0){//构造每一行
+		 if(_list!=null&&!_list.isEmpty()){//构造每一行
 			 List<Map<String, Object>> maps = null;
 			try {
 				maps = FieldsCollector.getFileds(_list);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				maps = new  ArrayList<Map<String,Object>>();
+				CommUtils.log(e, this.getClassName());
 			}
-				
 				for(int i = 0;i<maps.size();i++){
 					StringBuilder tr = new StringBuilder("<tr>");
 					if(mutiSelect){
-						tr .append(td+"<input type='checkbox' id='"+data+"_checkbox' name='"+data+"_checkbox'/>"+_td);
+						tr .append(td+ String.format(stringTemp, data,data)+td1);
 					}
-					Map<String, Object>  _cur = maps.get(i);
 					for(int k=0;k<l;k++){
 							v =  maps.get(i).get(list.get(k).getName())+"";
-							tr.append(td+v+_td);
+							tr.append(td+v+td1);
 					}
 					tr.append(_tr); 
 					tbody.append(tr);
@@ -132,7 +129,7 @@ public class Table extends TagSupport{
 		 try {
 			out.write(table);
 		} catch (IOException e) {
-			e.printStackTrace();
+			CommUtils.log(e, this.getClassName());
 		}
 		return EVAL_PAGE;
 	}

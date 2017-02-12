@@ -1,18 +1,10 @@
 package com.xbw.spring.tag;
 
 public class MyNode {
+	
 	private String lable ;
 	private String name;
 	private String value;
-	public String getLable() {
-		return lable;
-	}
-	public void setLable(String lable) {
-		this.lable = lable;
-	}
-	public String getName() {
-		return name;
-	}
 	public MyNode() {
 		super();
 	}
@@ -21,6 +13,15 @@ public class MyNode {
 		this.lable = lable;
 		this.name = name;
 		this.value = value;
+	}
+	public String getLable() {
+		return lable;
+	}
+	public void setLable(String lable) {
+		this.lable = lable;
+	}
+	public String getName() {
+		return name;
 	}
 	public void setName(String name) {
 		this.name = name;

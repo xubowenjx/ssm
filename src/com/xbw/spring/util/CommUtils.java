@@ -1,4 +1,7 @@
 package com.xbw.spring.util;
+
+import org.apache.log4j.Logger;
+
 /**
  * @ClassName: CommUtils   
  * @Description： 工具类
@@ -7,6 +10,10 @@ package com.xbw.spring.util;
  *
  */
 public class CommUtils {
+	private CommUtils(){
+		//private 
+	}
+	
 	/**
 	 * @Title: isNull
 	 * @Description:判断空字符串
@@ -33,5 +40,23 @@ public class CommUtils {
 	 */
 	public static  Object ifNull(Object obj ,Object repleaceObj){
 		return obj==null?repleaceObj:obj;
+	}
+	/**
+	  * @Title: log 
+	  * @Description: 记录异常日志
+	  * @param e
+	  * @param contex 
+	  * @return void 
+	  * @throws
+	 */
+	public static void log(Exception e,String contex){
+		Logger log = Logger.getLogger("异常日志");
+		if(!null0blank(contex)&&e!=null){
+			log.error(contex, e);
+		}else if(e!=null){
+			log.error(e);
+		}else{
+			log.info(contex);
+		}
 	}
 }

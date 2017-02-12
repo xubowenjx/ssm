@@ -8,6 +8,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import com.xbw.spring.util.CommUtils;
+
 public class FormTag extends TagSupport {
 	/**   
 	 */
@@ -19,7 +21,7 @@ public class FormTag extends TagSupport {
 	private String onSubmit;
 	private String direct = "normal";
 	//记录表单中的元素 input select 等
-	private List<MyNode> list = new LinkedList<MyNode>();
+	private List<MyNode> list = new LinkedList();
 	/**
      *  doStartTag()方法返回一个整数值，用来决定程序的后续流程。  
      *　A.Tag.SKIP_BODY：表示标签之间的内容被忽略  
@@ -27,8 +29,8 @@ public class FormTag extends TagSupport {
 	 */
 	@Override
 	public int doStartTag() throws JspException {
-		 if(list.size()>0){
-			 list = new LinkedList<MyNode>();
+		 if(!list.isEmpty()){
+			 list = new LinkedList();
 		 }
 	       		return EVAL_BODY_INCLUDE;  
 	}
@@ -44,7 +46,7 @@ public class FormTag extends TagSupport {
 	        try {  
 	            out.write("<form class='form-horizontal' action="+action+" method="+method+" onsubmit='"+onSubmit+"' name='"+name+"' id='"+id+"'>");
 	            int l = list.size();
-	            boolean b = direct.equals("normal");
+	            boolean b = "normal".equals(direct);
 	            for(int i  = 0;i<l;i++){ 
 	             
             		MyNode node = list.get(i);
@@ -66,7 +68,7 @@ public class FormTag extends TagSupport {
 	            }  
 	            out.write("</form>");
 	        } catch (IOException e) {  
-	            e.printStackTrace();  
+	        	CommUtils.log(e, "FormTag标签");
 	        }  
         return EVAL_PAGE;  
     }  

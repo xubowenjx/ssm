@@ -18,8 +18,8 @@ public class PaswordChek extends SimpleCredentialsMatcher {
 	@Override
 	public boolean doCredentialsMatch(AuthenticationToken token,
 			AuthenticationInfo info) {
-		UsernamePasswordToken _token = (UsernamePasswordToken) token;  
-		 String pwd = String.valueOf(_token.getPassword());
+		UsernamePasswordToken tokenn = (UsernamePasswordToken) token;  
+		 String pwd = String.valueOf(tokenn.getPassword());
         Object tokenCredentials = SecurUtils.md5(pwd);  
         Object accountCredentials = getCredentials(info);  
         //将密码加密与系统加密后的密码校验，内容一致就返回true,不一致就返回false  

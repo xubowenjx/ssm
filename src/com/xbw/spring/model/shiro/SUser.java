@@ -15,8 +15,8 @@ public class SUser implements java.io.Serializable {
 
 	// Constructors
 
-	/** default constructor */
 	public SUser() {
+		// default constructor 
 	}
 
 	/** full constructor */

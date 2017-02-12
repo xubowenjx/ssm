@@ -12,10 +12,8 @@ public class SUserRole implements java.io.Serializable {
 	private Integer userId;
 	private Integer roleId;
 
-	// Constructors
-
-	/** default constructor */
 	public SUserRole() {
+		// default constructor 
 	}
 
 	/** full constructor */

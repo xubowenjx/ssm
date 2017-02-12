@@ -6,10 +6,9 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 
 public class MessageSourceHelper {
     private ResourceBundleMessageSource messageSource;
-    public  static Locale local;
     public String getMessage(String code, Object[] args,  Locale locale) {
-    	locale=locale==null?local:locale;
-        String msg = messageSource.getMessage(code, args,locale);
+    	Locale localen=locale==null?new Locale("en_US"):locale;
+        String msg = messageSource.getMessage(code, args,localen);
         return msg != null ? msg.trim() : msg;
     }
    

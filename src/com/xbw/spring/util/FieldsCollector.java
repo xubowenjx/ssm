@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 public class FieldsCollector {
+	private FieldsCollector(){
+		//private 
+	}
 	/**
 	 * @Title: getFileds
 	 * @Description: 将Object转化为Map
@@ -24,10 +27,7 @@ public class FieldsCollector {
 	 * @throws InvocationTargetException
 	 *
 	 */
-	public static Map<String, Object> getFileds(Object object)
-			throws SecurityException, IllegalArgumentException,
-			NoSuchMethodException, IllegalAccessException,
-			InvocationTargetException {
+	public static Map<String, Object> getFileds(Object object)   {
 		Class clazz = object.getClass();
 		if(object instanceof Map){//参数是Map就直接返回
 			return (Map<String, Object>) object;
@@ -58,34 +58,24 @@ public class FieldsCollector {
 		 Object obj = null;
 		try {
 			obj = Class.forName(clazz.getName()).newInstance();
-			 for(Field f:fields){
-				 Object t = map.get(f.getName());
-				 if(t!=null){
-					f.setAccessible(true);
-					if("true".equals(t)){
-						f.set(obj, "true".equals(t));
-					}else{
-						f.set(obj, t);
+			Field f;
+			for(int i=0,j=fields.length;i<j;i++){
+					f=fields[i];
+					Object t =map.get(fields[i].getName());
+					if(t!=null){
+						f.setAccessible(true);
+						boolean b =  "true".equals(t)||"false".equals(t);
+						f.set(obj,b?b:t);
 					}
-					
-				 }
 			 }
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (Exception e) {
+			CommUtils.log(e, null);
+		} 
 		
 		return obj;
 	}
 
-	public static List<Map<String, Object>> getFileds(List<Object> objects)
-			throws Exception{
+	public static List<Map<String, Object>> getFileds(List<Object> objects) {
 		List<Map<String,Object>> rs = new ArrayList<Map<String,Object>>();
 		for(Object o:objects){
 			 rs.add( getFileds(o));
@@ -106,16 +96,21 @@ public class FieldsCollector {
 	 * @throws IllegalAccessException
 	 *
 	 */
-	public static  Object getPro(Object obj, String name)
-			throws IllegalArgumentException, IllegalAccessException {
+	public static  Object getPro(Object obj, String name)  {
 			Field fields[] = obj.getClass().getDeclaredFields();// 获得对象所有属性
-			Field field = null;
-			Object ret = null;
+			Field field ;
+			Object ret = null ;
 			for (int i = 0; i < fields.length; i++) {
 				field = fields[i];
 				if (field.getName().equals(name)) {
 					field.setAccessible(true);
-					ret = field.get(obj);
+					try {
+						ret = field.get(obj);
+					} catch (IllegalArgumentException e) {
+						CommUtils.log(e, null);
+					} catch (IllegalAccessException e) {
+						CommUtils.log(e, null);
+					}
 					break;
 				}
 			}

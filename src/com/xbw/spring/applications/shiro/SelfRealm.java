@@ -23,6 +23,7 @@ import com.xbw.spring.model.shiro.SUser;
 import com.xbw.spring.service.PermService;
 import com.xbw.spring.service.RoleService;
 import com.xbw.spring.service.UserService;
+import com.xbw.spring.util.CommUtils;
 
 public class SelfRealm extends AuthorizingRealm {
  
@@ -33,13 +34,6 @@ public class SelfRealm extends AuthorizingRealm {
 	@Autowired
 	private PermService permService;
 	protected final Logger log = Logger.getLogger(this.getClass());
-	
-	  /*
-	   * 不在配置文件中写的话就在这写
-	   *  @PostConstruct  
-	    public void initCredentialsMatcher() {  
-	        setCredentialsMatcher(new PaswordChek());  
-	    }  */
 
 	@Override
 	 /**
@@ -56,21 +50,18 @@ public class SelfRealm extends AuthorizingRealm {
 	        		simpleAuthorInfo.addRole("admin");
 	        		 return simpleAuthorInfo;  
 	        	}
-	        	
-	        	if(u!=null&&u.getUserId()!=null){
-	        		List<SRole> roles =  roleService.getSRolesByUserId(u.getUserId());
-	        		for(SRole r:roles){
-	        			Integer id = r.getId();
-	        			//添加角色
-	        			simpleAuthorInfo.addRole(id+"");
-	        			 List<SPerm> perms = permService.getPermsByRole(id);
-	        			 //添加权限项
-	        			 for(SPerm p: perms){
-	        				 simpleAuthorInfo.addStringPermission(p.getPermisionUrl());
-	        			 }
-	        		}
-	 	            return simpleAuthorInfo;  
-	        	}
+        		List<SRole> roles =  roleService.getSRolesByUserId(u.getUserId());
+        		for(SRole r:roles){
+        			Integer id = r.getId();
+        			//添加角色
+        			simpleAuthorInfo.addRole(id+"");
+        			 List<SPerm> perms = permService.getPermsByRole(id);
+        			 //添加权限项
+        			 for(SPerm p: perms){
+        				 simpleAuthorInfo.addStringPermission(p.getPermisionUrl());
+        			 }
+        		}
+ 	            return simpleAuthorInfo;  
 	        }
 		return null;
 	}
@@ -97,10 +88,8 @@ public class SelfRealm extends AuthorizingRealm {
         Subject currentUser = SecurityUtils.getSubject();  
         if(null != currentUser){  
             Session session = currentUser.getSession();  
-            System.out.println("Session默认超时时间为[" + session.getTimeout() + "]毫秒");  
-            if(null != session){  
-                session.setAttribute(key, value);  
-            }  
+        	CommUtils.log(null,"Session默认超时时间为[" + session.getTimeout() + "]毫秒");  
+            session.setAttribute(key, value);  
         }  
     }  
 
